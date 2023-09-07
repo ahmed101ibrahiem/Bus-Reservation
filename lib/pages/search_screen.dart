@@ -1,5 +1,7 @@
+import 'package:bus_reservation_udemy/providers/app_data_provider.dart';
 import 'package:bus_reservation_udemy/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../datasource/temp_db.dart';
 import '../utils/constants.dart';
@@ -24,6 +26,7 @@ class _SearchScreenState extends State<SearchScreen> {
         key: _formKey,
         child: Center(
           child: ListView(
+            padding:const EdgeInsets.symmetric(horizontal: 16.0),
             shrinkWrap: true,
             children: [
               DropdownButtonFormField<String>(
@@ -87,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child:
                   ElevatedButton(onPressed: _search
                       , child: const Text(
-                    'SEARCH'
+                    'SEARCH',
                   )),
                 ),
               ),
@@ -114,17 +117,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _search() {
     if(departureDate == null){
-
       showMsg(context: context, msg: emptyDateErrMessage);
        return;
     }
     if(_formKey.currentState!.validate()){
-      try{
-        final route = TempDB.tableRoute.firstWhere((element) => element.cityFrom==fromCity&&element.cityTo==toCity);
-        showMsg(context: context, msg: route.routeName);
-      }on StateError catch (error){
-        showMsg(context: context, msg: 'No route found');
-      }
+      Provider.of<AppDataProvider>(context,listen: false).
+      getRouteByCityFromAndCityTo(cityFrom: fromCity!,cityTo: toCity!).then((route) {
+        Navigator.pushNamed(context, routeNameSearchResultPage,
+            arguments: [route,getFormattedDate(departureDate!)]);
+      });
 
     }
   }

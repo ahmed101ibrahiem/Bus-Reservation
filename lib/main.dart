@@ -1,8 +1,14 @@
+import 'package:bus_reservation_udemy/pages/search_result_page.dart';
 import 'package:bus_reservation_udemy/pages/search_screen.dart';
+import 'package:bus_reservation_udemy/providers/app_data_provider.dart';
+import 'package:bus_reservation_udemy/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => AppDataProvider(),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,12 +18,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Bus Reservation',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
         brightness: Brightness.dark,
       ),
-      home: SearchScreen(),
+      routes: {
+        routeNameHome:(context)=>SearchScreen(),
+        routeNameSearchResultPage:(context)=>SearchResultPage(),
+      },
+      initialRoute: routeNameHome,
     );
   }
 }
