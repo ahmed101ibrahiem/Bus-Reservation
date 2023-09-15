@@ -59,7 +59,9 @@ class ScheduleItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.pushNamed(context, routeNameSeatPlanPage,arguments: [schedule,date]);
+      },
       child: Card(
         margin: const EdgeInsets.all(8.0),
         color: Colors.grey.shade800,
